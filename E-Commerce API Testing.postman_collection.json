@@ -1,0 +1,362 @@
+{
+  "info": {
+    "_postman_id": "dd62e43a-429d-40c9-83f8-d5aac3490819",
+    "name": "E-Commerce API Testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51673479",
+    "_collection_link": "https://go.postman.co/collection/51673479-dd62e43a-429d-40c9-83f8-d5aac3490819?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get All products",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// pm.test(\"Response time is less than 1000ms\", function(){\r\n//     pm.expect(pm.response.responseTime).to.be.below(1000);\r\n// })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products/",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Product by ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Property Contains ID\", function()\r\n{\r\n    const data = pm.response.json()\r\n    pm.expect(data).to.have.property('id')\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products/1",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Categories",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response is in array \" , function(){\r\n    const data = pm.response.json();\r\n    pm.expect(data).to.be.an('array');\r\n\r\n})\r\n\r\npm.test(\"Array Contain atleast one  category \" , function()\r\n{\r\n    const data = pm.response.json();\r\n    pm.expect(data.length).to.be.above(0)\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products/categories/",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "categories",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Limited Products",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response is in Array\", function()\r\n{\r\n    const data = pm.response.json();\r\n    pm.expect(data).to.be.an('array');\r\n})\r\n\r\npm.test(\"Response contains exactly 5 products \" , function()\r\n{\r\n    const data = pm.response.json();\r\n    pm.expect(data).to.have.lengthOf(5);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products?limit=5",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Response has property ID \", function () {\r\nconst data = pm.response.json();\r\n    pm.expect(data).to.have.property('id');\r\n});\r\n\r\npm.test(\"Title should be equal to API Testing Product\", function () {\r\nconst data = pm.response.json();\r\n    pm.expect(data.title).to.eql('API Testing Product');\r\n});\r\n\r\npm.test(\"Price should equal 499\", function()\r\n{\r\n    const data = pm.response.json();\r\n    pm.expect(data.price).to.eql('499');\r\n})\r\n\r\nconst response = pm.response.json();\r\npm.environment.set(\"productId\", response.id);"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"API Testing Product\",\r\n    \"price\": \"499\",\r\n    \"description\": \"Product created for postman API Testing\",\r\n    \"category\": \"electronics\",\r\n    \"image\": \"https://example.com/product.jpg\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://fakestoreapi.com/products",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Created Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// pm.test(\"Response has property ID \" , function()\r\n// {\r\n//     const data = pm.response.json();\r\n//     pm.expect(data).to.have.property('id');\r\n// })\r\n\r\n// pm.test(\"Product ID matches\", function()\r\n// {\r\n//     pm.expect(pm.response.json().id).to.eql(pm.environment.get(\"productId\"))\r\n// })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products/{{productId}}",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "{{productId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Existing product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response has property ID \" , function()\r\n{\r\n    const data = pm.response.json();\r\n    pm.expect(data).to.have.property('id');\r\n})\r\n\r\npm.test(\"Response is an Object\", function (){\r\n    pm.expect(pm.response.json()).to.be.an('object');\r\n\r\n})\r\n\r\npm.test(\"Product Id is 1\", function () {\r\n    pm.expect(pm.response.json().id).to.equal(1);\r\n});\r\n\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products/1",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response has property ID \" , function()\r\n{\r\n    const data = pm.response.json();\r\n    pm.expect(data).to.have.property('id');\r\n})\r\n\r\npm.test(\"Response has title equals updated API Testing Product \", function (){\r\n    const data = pm.response.json();\r\n    pm.expect\r\n\r\n})\r\n\r\n\r\npm.test(\"Response has price equals 599 \", function () {\r\n\r\nconst data = pm.response.json();\r\n    pm.expect(data.price).to.eql(\"599\")\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\" : \"Updated API Testing Product\",\r\n    \"price\": \"599\",\r\n    \"description\": \"Updated Product for API Testing\",\r\n    \"category\": \"electronics\",\r\n    \"image\": \"https://example.com/updated.jpg\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://fakestoreapi.com/products/1",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response has Property price\", function(){\r\n    const data = pm.response.json();\r\n    pm.expect(data).to.have.property('price');\r\n})\r\n\r\npm.test(\"Response price is 699\", function () {\r\n\r\nconst data = pm.response.json();\r\n    pm.expect(data.price).to.eql(\"699\");\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"price\": \"699\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://fakestoreapi.com/products/1",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response has property ID \" , function()\r\n{\r\n    const data = pm.response.json();\r\n    pm.expect(data).to.have.property('id');\r\n})\r\n\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products/1",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
